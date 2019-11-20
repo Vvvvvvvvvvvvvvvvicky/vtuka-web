@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Login from '@/components/manage/Login.vue'
-import Index from '@/components/home/Index.vue'
+import Login from '../components/Login'
+import AppIndex from '../components/home/AppIndex'
 
 Vue.use(Router)
 
@@ -9,21 +9,22 @@ export default new Router({
   routes: [
     {
       path: '/',
-      redirect: '/login'
-    },
-    {
-      path: '/index',
-      name: 'Index',
-      component: Index
-    },
-    {
-      path: '/manage',
-      redirect: '/login'
+      name: 'index',
+      redirect: '/index',
+      component: AppIndex,
+      meta: {
+        requireAuth: true
+      }
     },
     {
       path: '/login',
       name: 'Login',
       component: Login
+    },
+    {
+      path: '/index',
+      name: 'AppIndex',
+      component: AppIndex
     }
   ]
 })
