@@ -1,11 +1,13 @@
 <template>
-  <div>
-      用户名：<input type="text" v-model="loginInfoVo.username" placeholder="请输入用户名"/>
-      <br/>
-      密码：<input type="password" v-model="loginInfoVo.password" placeholder="请输入密码"/>
-      <br/>
-      <button v-on:click="login">登录</button>
-  </div>
+  <body id="login">
+      <div>
+          用户名：<input type="text" v-model="loginInfoVo.username" placeholder="请输入用户名"/>
+          <br/>
+          密码：<input type="password" v-model="loginInfoVo.password" placeholder="请输入密码"/>
+          <br/>
+          <button v-on:click="login">登录</button>
+      </div>
+  </body>
 </template>
 
 <script>
@@ -27,7 +29,6 @@ export default{
   },
   methods: {
     login () {
-      debugger;
       var _this = this
       this.$axios
         .post('/login', {
@@ -36,7 +37,6 @@ export default{
         })
         .then(resp => {
           if (resp.data.code === 200) {
-            debugger;
             var data = resp.data.data
             _this.$store.commit('login', data)
             var path = _this.$route.query.redirect
