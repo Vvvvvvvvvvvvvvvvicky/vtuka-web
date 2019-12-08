@@ -1,39 +1,65 @@
 <template>
   <body id="login">
-      <div>
-          用户名：<input type="text" v-model="loginInfoVo.username" placeholder="请输入用户名"/>
-          <br/>
-          密码：<input type="password" v-model="loginInfoVo.password" placeholder="请输入密码"/>
-          <br/>
-          <button v-on:click="login">登录</button>
-      </div>
+    <img :src="logoTitleUrl" class="logo-title">
+    <el-form :model="loginForm" status-icon :rules="rule2" class="login-container" ref="loginForm">
+      <el-form-item prop="username">
+        <el-input v-model="loginForm.username" auto-complete="off"></el-input>
+      </el-form-item>
+      <el-form-item prop="password">
+        <el-input type="password" v-model="loginForm.password" auto-complete="off"></el-input>
+      </el-form-item>
+      <el-checkbox class="login_remember" v-model="checked" >
+        <span style="color: #1b1a1a">记住密码</span>
+      </el-checkbox>
+      <el-form-item>
+        <el-button @click="submitForm('loginForm')">登录</el-button>
+        <el-button @click="resetForm('loginForm')">重置</el-button>
+      </el-form-item>
+    </el-form>
   </body>
 </template>
+X    
 
 <script>
 export default{
-  name: 'Login',
   data () {
+    var validatePassword = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error('请输入密码'));
+      }
+      setTimeout(() => {callback();}, 1000);
+    };
+    var validateUsername = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入用户名'));
+      } else {
+        callback();
+      }
+    };
     return {
-      rules: {
-        username: [{required: true, message: '用户名不能为空', trigger: 'blur'}],
-        password: [{required: true, message: '密码不能为空', trigger: 'blur'}]
-      },
-      checked: true,
-      loginInfoVo: {
+      loginForm: {
         username: '',
         password: ''
       },
-      loading: false
-    }
+      checked: false,
+      rule2: {
+        username: [
+          { validator: validateUsername, trigger: 'blur' }
+        ],
+        password: [
+          { validator: validatePassword, trigger: 'blur' }
+        ]
+      },
+      logoTitleUrl: "/static/logo_title.png"
+    };
   },
   methods: {
     login () {
-      var _this = this
+      var _this = this;
       this.$axios
         .post('/login', {
-          username: this.loginInfoVo.username,
-          password: this.loginInfoVo.password
+          username: this.loginForm.username,
+          password: this.loginForm.password
         })
         .then(resp => {
           if (resp.data.code === 200) {
@@ -44,7 +70,77 @@ export default{
           }
         })
         .catch(failResponse => {})
+    },
+    submitForm (formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.$options.methods.login.bind(this)();
+        } else {
+          console.log('error submit!!');
+          return false;
+        }
+      });
+    },
+    resetForm (formName) {
+      this.$refs[formName].resetFields();
     }
   }
 }
 </script>
+<style>
+  #login {
+    background:url("/static/login_bg.jpg") no-repeat top center;
+    background-position: center;
+    height: 100%;
+    width: 100%;
+    background-size: cover;
+    position: fixed;
+    color: #ecd2d2;
+  }
+  body{
+     margin: -5px 0px;
+  }
+  .login-container {
+    border-radius: 15px;
+    background-clip: padding-box;
+    margin-top: -50px;
+    margin-left: -150px;
+    width: 300px;
+    top: 50%;
+    left: 50%;
+    padding: 35px ;
+    border: 1px solid #908484;
+    box-shadow: 0 0 50px #cac6c6;
+    position: absolute;/*绝对定位*/
+  }
+  .el-button {
+    opacity: 0.6;
+    background: rgba(255, 255, 255, 0.5); 
+    color:  #1b1a1a;
+    text-shadow: 1px 2px 3px #ecb4c1;
+    font-size: 20px;
+    border: 1px  rgb(255, 255, 255);
+    width: 140px;
+  }
+  .el-input__inner {
+    opacity: 0.6;
+  }
+  
+  .login_remember {
+    padding: 0 25px 20px 100px;
+    font-size: 18px;
+    text-shadow: 1px 2px 3px #c7abab;
+  }
+  .el-form-item__content {
+    text-align: center;
+  }
+  .logo-title {
+    width: 500px;
+    margin-top: -250px;
+    margin-left: -250px;
+    top:50%;
+    left: 50%;
+    padding: 35px ;
+    position: absolute;/*绝对定位*/
+  }
+</style>

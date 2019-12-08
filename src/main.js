@@ -6,6 +6,7 @@ import router from './router'
 // import store from './store'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+import  VueResource  from 'vue-resource'
 
 var axios = require('axios')
 axios.defaults.baseURL = 'http://localhost:8443/vtuka/api'
@@ -14,6 +15,7 @@ axios.defaults.withCredentials = true
 Vue.prototype.$axios = axios
 Vue.config.productionTip = false
 Vue.use(ElementUI)
+Vue.use(VueResource)
 
 /* eslint-disable no-new */
 new Vue({

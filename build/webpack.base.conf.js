@@ -3,6 +3,7 @@ const path = require('path')
 const utils = require('./utils')
 const config = require('../config')
 const vueLoaderConfig = require('./vue-loader.conf')
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
 
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
@@ -38,6 +39,14 @@ module.exports = {
       '@': resolve('src'),
     }
   },
+  devtool: "sourcemap",
+  output: {
+      filename: 'bundle.js' // 打包出来的wenjian
+  },
+  plugins: [
+      // make sure to include the plugin for the magic
+      new VueLoaderPlugin()
+  ],
   module: {
     rules: [
       ...(config.dev.useEslint ? [createLintingRule()] : []),
