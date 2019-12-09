@@ -68,13 +68,13 @@ export default{
             _this.$router.replace({path: path === '/' || path === undefined ? '/home' : path})
           } else {
             this.$nextTick(()=>{
+              this.$message.error(resp.data.msg);
               this.$options.methods.resetForm.bind(this)('loginForm');
             });
           }
         })
         .catch(resp => {
-          console.log('请求失败');
-          //404界面
+          this.$message.error('请求失败,请重试');
         })
     },
     submitForm (formName) {
