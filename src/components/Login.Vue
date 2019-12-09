@@ -18,7 +18,6 @@
     </el-form>
   </body>
 </template>
-X    
 
 <script>
 export default{
@@ -62,14 +61,21 @@ export default{
           password: this.loginForm.password
         })
         .then(resp => {
-          if (resp.data.code === 200) {
-            var data = resp.data.data
-            _this.$store.commit('login', data)
+          if (resp.data.status === 200) {
+            //var data = resp.data.data
+            //_this.$store.commit('login', data)
             var path = _this.$route.query.redirect
             _this.$router.replace({path: path === '/' || path === undefined ? '/home' : path})
+          } else {
+            this.$nextTick(()=>{
+              this.$options.methods.resetForm.bind(this)('loginForm');
+            });
           }
         })
-        .catch(failResponse => {})
+        .catch(resp => {
+          console.log('请求失败');
+          //404界面
+        })
     },
     submitForm (formName) {
       this.$refs[formName].validate((valid) => {
@@ -82,6 +88,7 @@ export default{
       });
     },
     resetForm (formName) {
+      var _this = this;
       this.$refs[formName].resetFields();
     }
   }
