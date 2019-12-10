@@ -65,7 +65,7 @@ export default{
             //var data = resp.data.data
             //_this.$store.commit('login', data)
             var path = _this.$route.query.redirect
-            _this.$router.replace({path: path === '/' || path === undefined ? '/home' : path})
+            _this.$router.replace({path: path === '/' || path === undefined ? '/index' : path})
           } else {
             this.$nextTick(()=>{
               this.$message.error(resp.data.msg);
