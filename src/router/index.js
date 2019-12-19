@@ -9,6 +9,15 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
+      path: '/',
+      name: 'index',
+      redirect: '/index',
+      component: AppIndex,
+      meta: {
+        requireAuth: true
+      }
+    },
+    {
       path: '/home',
       name: 'Home',
       component: Home,
