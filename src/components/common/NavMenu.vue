@@ -1,73 +1,66 @@
 <template>
-    <el-col :span="12">
-    <h5>自定义颜色</h5>
+  <div>
     <el-menu
-      default-active="/index"
+      :default-active="'/index'"
       router
-      class="el-menu-vertical-demo"
-      @open="handleOpen"
-      @close="handleClose"
-      background-color="#545c64"
-      text-color="#fff"
-      active-text-color="#ffd04b">
-      <el-menu-item index="999" :rout="{path:'/home'}">
-        <i class="el-icon-location">
-        <span>主页</span>
+      mode="horizontal"
+      background-color="white"
+      text-color="#222"
+      active-text-color="red"
+      style="min-width: 1300px">
+      <el-menu-item v-for="(item,i) in navList" :key="i" :index="item.name">
+        {{ item.navItem }}
       </el-menu-item>
-      <el-submenu v-for="(item,index) in menuList" :index="item.routerPath" :key="index">
-        <template slot="title">
-          <i class="item.icon"></i>
-          <span>{{ item.name }}</span>
-        </template>
-        <template
-      </el-submenu>
-
-
-
-
-
-      <el-submenu index="1">
-        <template slot="title">
-          <i class="el-icon-location"></i>
-          <span>导航一</span>
-        </template>
-        <el-menu-item-group>
-          <template slot="title">分组一</template>
-          <el-menu-item index="1-1">选项1</el-menu-item>
-          <el-menu-item index="1-2">选项2</el-menu-item>
-        </el-menu-item-group>
-        <el-menu-item-group title="分组2">
-          <el-menu-item index="1-3">选项3</el-menu-item>
-        </el-menu-item-group>
-        <el-submenu index="1-4">
-          <template slot="title">选项4</template>
-          <el-menu-item index="1-4-1">选项1</el-menu-item>
-        </el-submenu>
-      </el-submenu>
-      <el-menu-item index="2">
-        <i class="el-icon-menu"></i>
-        <span slot="title">导航二</span>
-      </el-menu-item>
-      <el-menu-item index="3">
-        <i class="el-icon-setting"></i>
-        <span slot="title">导航三</span>
-      </el-menu-item>
+      <i class="el-icon-switch-button" v-on:click="logout" style="float:right;font-size: 40px;color: #222;padding: 10px"></i>
+      <span style="position: absolute;padding-top: 20px;right: 43%;font-size: 20px;font-weight: bold">V-TUKA</span>
     </el-menu>
-  </el-col>
+  </div>
 </template>
 
 <script>
-export default {
-  methods: {
-    handleOpen(key, keyPath) {
-      console.log(key, keyPath);
+  export default {
+    name: 'NavMenu',
+    data () {
+      return {
+        navList: [
+          {name: '/index', navItem: '首页'},
+          {name: '/dress', navItem: '图片馆'},
+          {name: '/library', navItem: '后管'},
+        ]
+      }
     },
-    handleClose(key, keyPath) {
-      console.log(key, keyPath);
+    computed: {
+      hoverBackground () {
+        return '#ffd04b'
+      }
+    },
+    methods: {
+      logout () {
+        var _this = this
+        this.$axios.get('/logout').then(resp => {
+          if (resp.data.code === 200) {
+            // 前后端状态保持一致
+            _this.$store.commit('logout')
+            _this.$router.replace('/login')
+          }
+        }).catch(failResponse => {})
+      }
     }
   }
-}
 </script>
 
 <style scoped>
+  a{
+    text-decoration: none;
+  }
+
+  span {
+    pointer-events: none;
+  }
+
+  .el-icon-switch-button {
+    cursor: pointer;
+    /*去除点击时的框线*/
+    outline:0;
+  }
 </style>

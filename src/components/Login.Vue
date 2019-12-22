@@ -55,7 +55,6 @@ export default{
   methods: {
     login () {
       var _this = this;
-      debugger;
       console.log(this.$store.state)
       this.$axios
         .post('/login', {
