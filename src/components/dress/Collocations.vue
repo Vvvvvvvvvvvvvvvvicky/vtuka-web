@@ -3,34 +3,25 @@
     <el-row >
       <!--<search-bar></search-bar>-->
       <el-tooltip effect="dark" placement="right"
-                  v-for="item in callocations"
+                  v-for="item in callocations.slice((currentPage-1)*pageSize,currentPage*pageSize)"
                   :key="item.id">
-       
-        <p slot="content" style="width: 300px" class="abstract">{{item.collocationType}}</p>
-        <el-card style="width: 450px;margin-bottom: 20px;height: 450px;float: left;margin-right: 15px" class="book"
+        <p slot="content" style="width: 200px" class="abstract">{{item.collocationType}}</p>
+        <el-card style="width: 250px;margin-bottom: 20px;height: 250px;float: left;margin-right: 15px" class="book"
                  bodyStyle="padding:10px" shadow="hover">
-          <div class="cover">
             <img :src="item.imgUrl" alt="封面">
-          </div>
-          <div class="info">
-            <div class="title">
-              <a href="">{{item.collocationType}}</a>
-            </div>
-          </div>
         </el-card>
       </el-tooltip>
     </el-row>
     <el-row class="pagination">
       <div align="middle" padding="100px">
-       <el-pagination
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page="currentPage"
-      :page-sizes="pageSizes"
-      :page-size="pagesize"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="total">
-    </el-pagination>
+        <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="currentPage"
+            :page-sizes="pageSizes"
+            :page-size="pageSize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="total"/>
       </div>
     </el-row>
   </div>
@@ -43,9 +34,10 @@
       return {
         callocations: [],
         currentPage: 1,
-        pageSizes: [10, 20, 30, 40, 50],
-        pagesize: 10,
-        total:0
+        pageSizes: [9, 18, 45, 90],
+        pageSize: 9,
+        pageNo: 1,
+        total:0,
       }
     },
     mounted: function () {
@@ -54,7 +46,12 @@
     methods:{
       loadCallocations () {
         var _this = this
-        this.$axios.get('/collocations').then(resp => {
+        this.$axios.get('/collocations', {
+            params: {
+              pageNo: this.pageNo,
+              pageSize: this.pageSize
+              }
+        }).then(resp => {
           if (resp && resp.status === 200) {
             _this.callocations = resp.data.resultObj.list
             _this.total = resp.data.resultObj.total
@@ -62,62 +59,27 @@
         })
       },
       handleCurrentChange: function (currentPage) {
-        this.currentPage = currentPage
+        this.pageNo = currentPage
+        this.loadCallocations()
       },
-      handleSizeChange: function(pagesize) {
-        this.pagesize = pagesize
+      handleSizeChange: function(pageSize) {
+        this.pageSize = pageSize
+        this.loadCallocations()
       }
     }
   }
 </script>
 
 <style scoped>
-  .pagination {
-    height: 240px;
-  }
-
-  .pagination_div {
-    
-  }
-
-  .cover {
-    /*width: 455px;
-    height: 172px;*/
-    margin-bottom: 7px;
-    overflow: hidden;
-    cursor: pointer;
-  }
-
   img {
-    width: 400px;
-    height: 400px;
+    width: 230px;
+    height: 230px;
     margin: 0 auto;
-  }
-
-  .title {
-    font-size: 14px;
-    text-align: left;
-  }
-
-  .author {
-    color: #333;
-    width: 102px;
-    font-size: 13px;
-    margin-bottom: 6px;
-    text-align: left;
   }
 
   .abstract {
     display: block;
-    line-height: 17px;
-  }
-
-  a {
-    text-decoration: none;
-  }
-
-  a:link, a:visited, a:focus {
-    color: #3377aa;
+    line-height: 5px;
   }
 
   .el-pagination {
