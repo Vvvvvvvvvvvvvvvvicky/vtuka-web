@@ -8,9 +8,10 @@
         <p slot="content" style="width: 200px" class="abstract">{{item.collocationType}}</p>
         <el-card style="width: 250px;margin-bottom: 20px;height: 250px;float: left;margin-right: 15px" class="book"
                  bodyStyle="padding:10px" shadow="hover">
-            <img :src="item.imgUrl" alt="封面">
+            <img :src="item.imgUrl" alt="封面" @click="editBook(item)">
         </el-card>
       </el-tooltip>
+      <edit-form @onSubmit="loadBooks()" ref="edit"></edit-form>
     </el-row>
     <el-row class="pagination">
       <div align="middle" padding="100px">
@@ -28,8 +29,10 @@
 </template>
 
 <script>
+import EditForm from './EditForm'
   export default {
     name: 'Collocations',
+    components: {EditForm},
     data () {
       return {
         callocations: [],
@@ -65,6 +68,25 @@
       handleSizeChange: function(pageSize) {
         this.pageSize = pageSize
         this.loadCallocations()
+      },
+      editBook: function(item) {
+        this.$refs.edit.dialogFormVisible = true
+        this.$refs.edit.form = {
+          id: item.id,
+          collocationUrl: item.collocationUrl,
+          imgUrl: item.imgUrl,
+          collocationType: item.collocationType,
+          collocationDesc: item.collocationDesc,
+          isDelete: item.isDelete,
+          isShow: item.isShow,
+          DressCollocationItem: {
+            id: item.category.id.toString(),
+            name: item.category.name
+          }
+        }
+        // this.$refs.edit.category = {
+        //   id: item.category.id.toString()
+        // }
       }
     }
   }

@@ -4,7 +4,7 @@
             <switch></switch>
             <SideMenu></SideMenu>
         </el-aside>
-        <el-main>
+        <el-main  style="width:0">
             <collocations class="books-area"></collocations>
         </el-main>
     </el-container>
