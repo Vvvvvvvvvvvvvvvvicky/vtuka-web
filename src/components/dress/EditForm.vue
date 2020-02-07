@@ -2,34 +2,32 @@
   <div>
     <i class="el-icon-circle-plus-outline"  @click="dialogFormVisible = true"></i>
     <el-dialog
-      title="添加/修改搭配"
+      title="修改搭配"
+      width="600px"
       :visible.sync="dialogFormVisible"
       @close="clear">
-      <el-form v-model="form" style="text-align: left" ref="dataForm">
-        <el-form-item label="搭配源信息" :label-width="formLabelWidth" prop="collocationUrl">
-          <el-input v-model="form.title" autocomplete="off" placeholder="不加《》"></el-input>
+      <el-form v-model="form" style="text-align: left" >
+        <el-form-item label="搭配源信息：" :label-width="formLabelWidth" prop="collocationUrl">
+          <el-input v-model="form.collocationUrl" autocomplete="on" placeholder="搭配源地址，例如：http://www.xingpin.com/px/58999"></el-input>
         </el-form-item>
-        <el-form-item label="搭配主图" :label-width="formLabelWidth" prop="imgUrl">
-          <el-input v-model="form.author" autocomplete="off"></el-input>
+        <el-form-item label="搭配封面主图：" :label-width="formLabelWidth" prop="imgUrl">
+          <el-input v-model="form.imgUrl" autocomplete="off"></el-input>
+          <img :src="form.imgUrl" style="margin:15px;">
         </el-form-item>
-        <el-form-item label="搭配名称" :label-width="formLabelWidth" prop="collocationType">
-          <el-input v-model="form.date" autocomplete="off"></el-input>
+        <el-form-item label="搭配名称：" :label-width="formLabelWidth" prop="collocationType">
+          <el-input v-model="form.collocationType" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="搭配描述" :label-width="formLabelWidth" prop="collocationDesc">
-          <el-input v-model="form.press" autocomplete="off"></el-input>
+        <el-form-item label="搭配描述：" :label-width="formLabelWidth" prop="collocationDesc">
+          <el-input  type="textarea" v-model="form.collocationDesc" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="存储状态（是否删除）" :label-width="formLabelWidth" prop="isDelete">
-          <el-input v-model="form.cover" autocomplete="off" placeholder="图片 URL"></el-input>
-          <img-upload @onUpload="uploadImg" ref="imgUpload"></img-upload>
+        <el-form-item label="存储状态：" :label-width="formLabelWidth" prop="isDelete">
+          <el-switch v-model="form.isDelete" style="text-align:left;"></el-switch>
         </el-form-item>
-        <el-form-item label="展示状态（是否显示）" :label-width="formLabelWidth" prop="isShow">
-          <el-input type="textarea" v-model="form.abs" autocomplete="off"></el-input>
+        <el-form-item label="展示状态：" :label-width="formLabelWidth" prop="isShow">
+          <el-switch v-model="form.isShow"></el-switch>
         </el-form-item>
-        <el-form-item label="搭配具体单品信息" :label-width="formLabelWidth" prop="DressCollocationItem">
-          <el-input type="textarea" v-model="form.abs" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="分类" :label-width="formLabelWidth" prop="cid">
-        <el-select v-model="form.category.id" placeholder="请选择分类">
+        <!-- <el-form-item label="分类" :label-width="formLabelWidth" prop="cid">
+        <el-select placeholder="请选择分类">
           <el-option label="文学" value="1"></el-option>
           <el-option label="流行" value="2"></el-option>
           <el-option label="文化" value="3"></el-option>
@@ -37,14 +35,23 @@
           <el-option label="经管" value="5"></el-option>
           <el-option label="科技" value="6"></el-option>
         </el-select>
-        </el-form-item>
-        <el-form-item prop="id" style="height: 0">
-          <el-input type="hidden" v-model="form.id" autocomplete="off"></el-input>
-        </el-form-item>
+        </el-form-item> -->
+        <el-input type="hidden" v-model="form.id" autocomplete="off"></el-input>
       </el-form>
       <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false;innerVisible = true" >查看/编辑单品清单</el-button>
+          <el-dialog
+            width="30%"
+            title="单品信息"
+            :visible.sync="innerVisible"
+            append-to-body>
+            <div slot="footer" class="dialog-footer">
+              <el-button @click="dialogFormVisible = false">取 消</el-button>
+              <el-button type="primary" @click="onSubmit">提 交</el-button>
+            </div>
+          </el-dialog>
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="onSubmit">确 定</el-button>
+        <el-button type="primary" @click="onSubmit">提 交</el-button>
       </div>
     </el-dialog>
   </div>
@@ -56,6 +63,7 @@
     data () {
       return {
         dialogFormVisible: false,
+        innerVisible: false,
         form: {
           id: '',
           collocationUrl: '',
@@ -66,12 +74,20 @@
           isShow: '',
           DressCollocationItems: []
         },
+        sub_form: {
+          id: '',
+          itemUrl: '',
+          itemName: '',
+          itemBrand: '',
+          imgUrl: '',
+          price:0,
+          isDelete: '',
+        },
         formLabelWidth: '120px'
       }
     },
     methods: {
       clear () {
-        //this.$refs.imgUpload.clear()
         this.form = {
           id: '',
           collocationUrl: '',
@@ -105,11 +121,24 @@
   }
 </script>
 
-<style scoped>
+<style>
   .el-icon-circle-plus-outline {
     margin: 50px 0 0 20px;
     font-size: 100px;
     float: left;
     cursor: pointer;
+  }
+  .el-dialog {
+    width: 600px;
+  }
+
+  .el-form-item__content {
+    text-align: left;
+  }
+  .el-dialog__body {
+    padding: 30px 20px 0px 20px;
+  }
+  .el-button {
+    margin: 0px 10px;
   }
 </style>

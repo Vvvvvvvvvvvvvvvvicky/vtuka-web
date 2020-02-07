@@ -79,10 +79,10 @@ import EditForm from './EditForm'
           collocationDesc: item.collocationDesc,
           isDelete: item.isDelete,
           isShow: item.isShow,
-          DressCollocationItem: {
-            id: item.category.id.toString(),
-            name: item.category.name
-          }
+          // DressCollocationItem: {
+          //   id: item.category.id.toString(),
+          //   name: item.category.name
+          // }
         }
         // this.$refs.edit.category = {
         //   id: item.category.id.toString()

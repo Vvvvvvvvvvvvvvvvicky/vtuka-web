@@ -95,7 +95,7 @@ export default{
   }
 }
 </script>
-<style>
+<style scoped>
   #login {
     background:url("/static/login_bg.jpg") no-repeat top center;
     background-position: center;
