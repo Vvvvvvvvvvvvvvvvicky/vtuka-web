@@ -1,27 +1,22 @@
 <template>
-    <el-container>
-        <el-aside style="width:200px; margin-top:20px">
-            <switch></switch>
-            <SideMenu></SideMenu>
-        </el-aside>
-        <el-main  style="width:0">
-            <collocations class="books-area"></collocations>
-        </el-main>
-    </el-container>
+    <div class="fillcontain">
+        
+            <!-- <collocations class="books-area"></collocations> -->
+            123
+    </div>
 </template>
 
 <script>
-import SideMenu from './SideMenu'
 import Collocations from './Collocations'
 export default {
     name: 'AppDress',
-    components: {SideMenu,Collocations}
+    components: {Collocations}
 }
 </script>
 
 <style scoped>
   .books-area {
-    width: 990px;
+    width:100%;
     margin-left: auto;
     margin-right: auto;
   }

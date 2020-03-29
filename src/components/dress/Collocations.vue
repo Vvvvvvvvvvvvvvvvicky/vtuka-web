@@ -13,8 +13,8 @@
       </el-tooltip>
       <edit-form @onSubmit="loadBooks()" ref="edit"></edit-form>
     </el-row>
-    <el-row class="pagination">
-      <div align="middle" padding="100px">
+    <el-row >
+      <div align="middle" padding="100px" class="pagination">
         <el-pagination
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"

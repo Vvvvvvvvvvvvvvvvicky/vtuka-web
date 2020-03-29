@@ -39,14 +39,15 @@
         <el-input type="hidden" v-model="form.id" autocomplete="off"></el-input>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false;innerVisible = true" >查看/编辑单品清单</el-button>
+        <el-button @click="dialogFormVisible = true;innerVisible = true" >查看/编辑单品清单</el-button>
           <el-dialog
             width="30%"
             title="单品信息"
             :visible.sync="innerVisible"
             append-to-body>
+            
             <div slot="footer" class="dialog-footer">
-              <el-button @click="dialogFormVisible = false">取 消</el-button>
+              <el-button @click="innerVisible = false">取 消</el-button>
               <el-button type="primary" @click="onSubmit">提 交</el-button>
             </div>
           </el-dialog>
@@ -72,7 +73,6 @@
           collocationDesc: '',
           isDelete: '',
           isShow: '',
-          DressCollocationItems: []
         },
         sub_form: {
           id: '',
@@ -101,7 +101,7 @@
       },
       onSubmit () {
         this.$axios
-          .post('/books', {
+          .put('/collocations/info', {
               id: this.form.id,
               collocationUrl: this.form.collocationUrl,
               imgUrl: this.form.imgUrl,
